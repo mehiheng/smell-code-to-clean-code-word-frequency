@@ -49,7 +49,7 @@ public class WordFrequencyGame {
 
         List<Input> inputList = new ArrayList<>();
         for (String s : arr) {
-            Input input = new Input(s, 1);
+            Input input = new Input(s);
             inputList.add(input);
         }
         return inputList;
