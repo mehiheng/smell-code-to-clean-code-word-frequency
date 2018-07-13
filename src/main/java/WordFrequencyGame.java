@@ -10,39 +10,49 @@ public class WordFrequencyGame {
             return inputStr + " 1";
         } else {
 
-            try {
-
                 //split the input string with 1 to n pieces of spaces
-                String[] arr = inputStr.split("\\s+");
-
-                List<Input> inputList = new ArrayList<>();
-                for (String s : arr) {
-                    Input input = new Input(s, 1);
-                    inputList.add(input);
-                }
+            List<Input> inputList = translateForm(inputStr);
 
                 //get the map for the next step of sizing the same word
-                Map<String, List<Input>> map = getListMap(inputList);
+            List<word> wordList = wordView(inputList);
 
-                List<Input> list = new ArrayList<>();
-                for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
-                    Input input = new Input(entry.getKey(), entry.getValue().size());
-                    list.add(input);
-                }
-                inputList = list;
+                wordList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
 
-                inputList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+            return viewModel(wordList);
 
-                StringJoiner joiner = new StringJoiner("\n");
-                for (Input w : inputList) {
-                    String s = w.getValue() + " " + w.getWordCount();
-                    joiner.add(s);
-                }
-                return joiner.toString();
-            } catch (Exception e) {
-                return "Calculate Error";
-            }
         }
+    }
+
+    private String viewModel(List<word> wordList) {
+        StringJoiner joiner = new StringJoiner("\n");
+        for (word w : wordList) {
+            String s = w.getValue() + " " + w.getWordCount();
+            joiner.add(s);
+        }
+        return joiner.toString();
+    }
+
+    private List<word> wordView(List<Input> inputList) {
+        Map<String, List<Input>> map = getListMap(inputList);
+
+        List<word> list = new ArrayList<>();
+        for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
+            word input = new word(entry.getKey(), entry.getValue().size());
+            list.add(input);
+        }
+
+        return list;
+    }
+
+    private List<Input> translateForm(String inputStr) {
+        String[] arr = inputStr.split("\\s+");
+
+        List<Input> inputList = new ArrayList<>();
+        for (String s : arr) {
+            Input input = new Input(s, 1);
+            inputList.add(input);
+        }
+        return inputList;
     }
 
     private Map<String, List<Input>> getListMap(List<Input> inputList) {
